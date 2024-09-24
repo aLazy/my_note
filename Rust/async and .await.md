@@ -2,6 +2,7 @@
 ## 参考资料
 1. https://github.com/rustcn-org/async-book/blob/master/async/getting-started.md
 2. https://doc.rust-lang.org/std/future/trait.Future.html
+3. https://www.cnblogs.com/kaleidopink/p/16659468.html
 ## async 介绍
 ### async 和其他并发模型比较
 * OS线程：无需改变任何编程模型。非常适合作为语言的原生并发模型。**Rust就选择了原生支持线程级的并发编程**
@@ -15,4 +16,8 @@
 * async/await: 该模型性能高，还支持底层编程，同时还能像线程和协程一样无需过多的改变编程模型。
   * 模型缺点：模型内部实现机制过于复杂，理解和使用起来也没有线程和协程简单
 
-<font color = red>Rust选择了同时提供多线程编程和async编程</font>
+<font color = red>Rust选择了同时提供多线程编程和async编程</font>, 当并发度较低时或者cpu密集型时，使用多线程编程。当需要高并发，异步IO时，则选择async编程。 
+
+### rust中异步关键特性和关键字
+* Future： **Future在rust中是惰性的**，只有在被轮询时才会运行，丢弃一个future会阻止它未来再被运行。你可以将Future理解为在未来某个时间点被调度执行的任务
+* Async：**Async在rust中的使用是零开销**
