@@ -18,3 +18,42 @@ https://juejin.cn/post/7300779577060196362?from=search-suggest
 3. weak_ptr:
 2. unique_ptr:
 #### 智能指针的原理
+
+### 左值，右值，左值引用，右值引用
+1. 左值和右值的概念
+左值：可以放在赋值号左边可以被赋值的值。**左值必须要在内存中有实体**
+右值：当在赋值号邮编取出值赋给其他变量的值。**右值既可以在内存也可以在cpu寄存器**
+一个对象呗作右值时，使用的是它的内容，当被用作左值时，使用的是它的地址
+2. 引用
+引用相当于变量别名，且引用必须初始化
+    1. 声明医用时必须初始化，且一旦绑定，不可把引用绑定到其他对象。即引用必须初始化，不能对引用重定义
+    2. 对引用的一切操作，就相当于对原对象的操作
+3. 左值引用和右值引用
+    * 左值引用： type &引用名 = 左值表达式
+    * 右值引用： type &&引用名 = 右值表达式
+
+#### std::move函数原型
+```C++
+template <typename T>
+typename remove_reference<T>::type&& move(T &&t)
+{
+    return static_cast<typename remove_reference<T>::type&&>(t);
+}
+```
+
+**引用折叠**
+所有引用折叠最终都代表一个引用，要么是左值引用，要么是右值引用
+规则：如果任一引用为左值引用，则结果为左值引用。否则结果为右值引用。
+例：
+* 「X& &」「x&& &」「x& &&」 都折叠为x&,当做左值处理
+* 「x&& &&」「x&&」 都折叠为x&&,当做右值处理
+
+### static_cast const_cast dynamic_cast reinterpret_cast
+```c++
+static_cast<new_type> (expression)
+const_cast<new_type> (expression)
+dynamic_cast<new_type> (expression)
+reinterpret_cast<new_type> (expression)
+```
+#### static_cast
+static_cast相当于c语言中的强转
